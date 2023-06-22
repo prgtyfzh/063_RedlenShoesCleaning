@@ -45,10 +45,10 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 20),
                       Container(
                         margin: const EdgeInsets.only(
-                          right: 220,
+                          right: 250,
                         ),
                         child: const Text(
-                          'Username',
+                          'Name',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           decoration: const InputDecoration(
-                            hintText: 'Username',
+                            hintText: 'Name',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),

@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           right: 250,
                         ),
                         child: const Text(
-                          'Nama',
+                          'Name',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           decoration: const InputDecoration(
-                            hintText: 'Nama',
+                            hintText: 'Name',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),
