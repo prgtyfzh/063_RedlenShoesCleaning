@@ -22,3 +22,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/image/LoginPage.png
+    - assets/image/LogoRedlen.png
