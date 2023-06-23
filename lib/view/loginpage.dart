@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redlenshoescleaning/view/dashboardadmin.dart';
 import 'package:redlenshoescleaning/view/registerpage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -93,12 +94,12 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 40),
                       ElevatedButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const Dashboard(),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DashboardAdmin(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF454BE0),
