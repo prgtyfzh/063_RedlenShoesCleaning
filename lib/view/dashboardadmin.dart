@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/view/pengeluaran/createpengeluaran.dart';
 
 class DashboardAdmin extends StatefulWidget {
   const DashboardAdmin({Key? key}) : super(key: key);
@@ -255,12 +256,12 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const AddContact(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreatePengeluaran(),
+                ),
+              );
             },
             backgroundColor: const Color(0xFFD9D9D9),
             child: const Icon(Icons.add),
