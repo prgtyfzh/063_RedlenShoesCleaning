@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/view/user/createpesanan.dart';
+import 'package:redlenshoescleaning/view/user/detailpesanan.dart';
 
 class DashboardUser extends StatefulWidget {
   const DashboardUser({super.key});
@@ -36,18 +37,18 @@ class _DashboardUserState extends State<DashboardUser> {
                   ),
                   child: InkWell(
                     onLongPress: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => UpdateContact(
-                      //       id: data[index]['id'],
-                      //       name: data[index]['name'],
-                      //       phone: data[index]['phone'],
-                      //       email: data[index]['email'],
-                      //       address: data[index]['address'],
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DetailPesanan(
+                              // id: data[index]['id'],
+                              // name: data[index]['name'],
+                              // phone: data[index]['phone'],
+                              // email: data[index]['email'],
+                              // address: data[index]['address'],
+                              ),
+                        ),
+                      );
                     },
                     child: const Card(
                       color: Color(0xFFD9D9D9),
