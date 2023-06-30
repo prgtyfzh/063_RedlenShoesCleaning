@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:redlenshoescleaning/view/loginpage.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+import '../controller/authcontroller.dart';
+import '../model/usermodel.dart';
+import 'loginpage.dart';
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
+class RegisterPage extends StatelessWidget {
+  RegisterPage({super.key});
 
-class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // String? username;
-  // String? password;
+  final authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
+    String? name;
+    String? email;
+    String? password;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -63,6 +63,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Name',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
+                          onChanged: (value) {
+                            name = value;
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -86,6 +89,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Email',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
+                          onChanged: (value) {
+                            email = value;
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -111,6 +117,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
+                          onChanged: (value) {
+                            password = value;
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -136,17 +145,66 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
+                          onChanged: (value) {
+                            password = value;
+                          },
                         ),
                       ),
                       const SizedBox(height: 40),
                       ElevatedButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const Dashboard(),
-                          //   ),
-                          // );
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            UserModel? registeredUser = await authController
+                                .registerWithEmailAndPassword(
+                                    email!, password!, name!);
+                            if (registeredUser != null) {
+                              // Registration successfull
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title:
+                                        const Text('Registration Successful'),
+                                    content: const Text(
+                                        'You have been successfully registered.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return LoginPage();
+                                          }));
+                                          // Navigate to the next screen or perform any desired action
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              // Registration failed
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Registration Failed'),
+                                    content: const Text(
+                                        'An error occured during registration.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF454BE0),
@@ -172,7 +230,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
+                                  builder: (context) => LoginPage(),
                                 ),
                               );
                             },

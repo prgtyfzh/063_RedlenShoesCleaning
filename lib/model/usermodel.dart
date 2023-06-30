@@ -1,28 +1,47 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
-  String id;
+  String name;
   String email;
-  String role;
+  String uid;
+  String? role;
   UserModel({
-    required this.id,
+    required this.name,
     required this.email,
-    required this.role,
+    required this.uid,
+    this.role,
   });
+
+  UserModel copyWith({
+    String? name,
+    String? email,
+    String? uid,
+    String? role,
+  }) {
+    return UserModel(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      uid: uid ?? this.uid,
+      role: role ?? this.role,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'name': name,
       'email': email,
+      'uid': uid,
       'role': role,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] ?? '',
+      name: map['name'] ?? '',
       email: map['email'] ?? '',
-      role: map['role'] ?? '',
+      uid: map['uid'] ?? '',
+      role: map['role'],
     );
   }
 
@@ -30,4 +49,27 @@ class UserModel {
 
   factory UserModel.fromJson(String source) =>
       UserModel.fromMap(json.decode(source));
+
+  @override
+  String toString() =>
+      'UserModel(name: $name, email: $email, uid: $uid, role: $role)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is UserModel &&
+        other.name == name &&
+        other.email == email &&
+        other.uid == uid &&
+        other.role == role;
+  }
+
+  @override
+  int get hashCode =>
+      name.hashCode ^ email.hashCode ^ uid.hashCode ^ role.hashCode;
+
+  static UserModel? fromFirebaseUser(User user) {
+    return null;
+  }
 }

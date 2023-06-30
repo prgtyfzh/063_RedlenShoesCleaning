@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:redlenshoescleaning/controller/authcontroller.dart';
+import 'package:redlenshoescleaning/model/usermodel.dart';
 import 'package:redlenshoescleaning/view/dashboardadmin.dart';
+import 'package:redlenshoescleaning/view/dashboarduser.dart';
 import 'package:redlenshoescleaning/view/registerpage.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // String? username;
-  // String? password;
+  final authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
+    String? email;
+    String? password;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -64,6 +63,15 @@ class _LoginPageState extends State<LoginPage> {
                             hintText: 'Email',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -89,17 +97,53 @@ class _LoginPageState extends State<LoginPage> {
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       const SizedBox(height: 40),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DashboardAdmin(),
-                            ),
-                          );
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            UserModel? loginUser = await authController
+                                .signInWithEmailAndPassword(email!, password!);
+                            if (loginUser!.role == 'admin') {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return DashboardAdmin();
+                              }));
+                            } else if (loginUser.role != 'admin') {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return DashboardUser();
+                              }));
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Login Failed'),
+                                      content: const Text(
+                                          'An error occurred during registration.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('OK'),
+                                        )
+                                      ],
+                                    );
+                                  });
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF454BE0),
@@ -116,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -125,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const RegisterPage(),
+                                  builder: (context) => RegisterPage(),
                                 ),
                               );
                             },
