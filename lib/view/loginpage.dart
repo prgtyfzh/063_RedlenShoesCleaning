@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                           right: 250,
                         ),
                         child: const Text(
-                          'Name',
+                          'Email',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           decoration: const InputDecoration(
-                            hintText: 'Name',
+                            hintText: 'Email',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),
