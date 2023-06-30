@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/view/pengeluaran/createpengeluaran.dart';
 import 'package:redlenshoescleaning/view/pengeluaran/updatepengeluaran.dart';
 import 'package:redlenshoescleaning/view/treatment/createtreatment.dart';
+import 'package:redlenshoescleaning/view/treatment/updatetreatment.dart';
 
 class DashboardAdmin extends StatefulWidget {
   const DashboardAdmin({Key? key}) : super(key: key);
@@ -331,7 +332,13 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    // Handle update button press
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UpdateTreatment(),
+                                      ),
+                                    );
                                   },
                                 ),
                                 IconButton(
