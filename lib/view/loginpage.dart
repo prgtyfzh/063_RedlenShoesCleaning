@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:redlenshoescleaning/controller/authcontroller.dart';
 import 'package:redlenshoescleaning/model/usermodel.dart';
-import 'package:redlenshoescleaning/view/dashboardadmin.dart';
-import 'package:redlenshoescleaning/view/dashboarduser.dart';
 import 'package:redlenshoescleaning/view/registerpage.dart';
+import 'package:redlenshoescleaning/view/user/dashboarduser.dart';
+import 'admin/dashboardadmin.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final authController = AuthController();
 
+  String? email;
+  String? password;
+
   @override
   Widget build(BuildContext context) {
-    String? email;
-    String? password;
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -64,11 +69,15 @@ class LoginPage extends StatelessWidget {
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
                           onChanged: (value) {
-                            email = value;
+                            setState(() {
+                              email = value;
+                            });
                           },
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value == null || value.isEmpty) {
                               return 'Please enter your email';
+                            } else if (!value.contains('@')) {
+                              return 'Please enter a valid email';
                             }
                             return null;
                           },
@@ -98,7 +107,9 @@ class LoginPage extends StatelessWidget {
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
                           onChanged: (value) {
-                            password = value;
+                            setState(() {
+                              password = value;
+                            });
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -112,36 +123,45 @@ class LoginPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            UserModel? loginUser = await authController
+                            UserModel? registeredUser = await authController
                                 .signInWithEmailAndPassword(email!, password!);
-                            if (loginUser!.role == 'admin') {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return DashboardAdmin();
-                              }));
-                            } else if (loginUser.role != 'admin') {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return DashboardUser();
-                              }));
+                            if (registeredUser != null) {
+                              if (registeredUser.role == 'admin') {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const DashboardAdmin();
+                                }));
+                              } else {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const DashboardUser();
+                                }));
+                              }
                             } else {
                               showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Theme(
+                                    data: ThemeData(
+                                      dialogBackgroundColor:
+                                          const Color(0xFFD9D9D9),
+                                    ),
+                                    child: AlertDialog(
                                       title: const Text('Login Failed'),
                                       content: const Text(
-                                          'An error occurred during registration.'),
+                                          'Invalid email or password.'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
                                           child: const Text('OK'),
-                                        )
+                                        ),
                                       ],
-                                    );
-                                  });
+                                    ),
+                                  );
+                                },
+                              );
                             }
                           }
                         },
@@ -160,7 +180,6 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -170,7 +189,7 @@ class LoginPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => RegisterPage(),
+                                  builder: (context) => const RegisterPage(),
                                 ),
                               );
                             },

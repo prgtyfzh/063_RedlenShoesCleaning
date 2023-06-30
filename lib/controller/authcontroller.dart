@@ -9,6 +9,27 @@ class AuthController {
 
   bool get success => false;
 
+  Future<UserModel?> registerWithEmailAndPassword(
+      String email, String password, String name) async {
+    try {
+      final UserCredential userCredential = await auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        final UserModel newUser = UserModel(
+            name: name, email: user.email ?? '', uId: user.uid, role: 'user');
+
+        await userCollection.doc(newUser.uId).set(newUser.toMap());
+
+        return newUser;
+      }
+    } catch (e) {
+      //
+    }
+    return null;
+  }
+
   Future<UserModel?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -21,37 +42,13 @@ class AuthController {
             await userCollection.doc(user.uid).get();
 
         final UserModel currentUser = UserModel(
-          uid: user.uid,
+          uId: user.uid,
           email: user.email ?? '',
           name: snapshot['name'] ?? '',
           role: snapshot['role'] ?? '',
         );
 
         return currentUser;
-      }
-    } catch (e) {
-      //
-    }
-    return null;
-  }
-
-  Future<UserModel?> registerWithEmailAndPassword(
-      String email, String password, String name) async {
-    try {
-      final UserCredential userCredential = await auth
-          .createUserWithEmailAndPassword(email: email, password: password);
-      final User? user = userCredential.user;
-
-      if (user != null) {
-        final UserModel newUser = UserModel(
-          uid: user.uid,
-          email: user.email ?? '',
-          name: name,
-        );
-
-        await userCollection.doc(newUser.uid).set(newUser.toMap());
-
-        return newUser;
       }
     } catch (e) {
       //

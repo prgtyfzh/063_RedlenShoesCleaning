@@ -4,25 +4,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 class UserModel {
   String name;
   String email;
-  String uid;
+  String uId;
   String? role;
   UserModel({
     required this.name,
     required this.email,
-    required this.uid,
+    required this.uId,
     this.role,
   });
 
   UserModel copyWith({
     String? name,
     String? email,
-    String? uid,
+    String? uId,
     String? role,
   }) {
     return UserModel(
       name: name ?? this.name,
       email: email ?? this.email,
-      uid: uid ?? this.uid,
+      uId: uId ?? this.uId,
       role: role ?? this.role,
     );
   }
@@ -31,7 +31,7 @@ class UserModel {
     return {
       'name': name,
       'email': email,
-      'uid': uid,
+      'uId': uId,
       'role': role,
     };
   }
@@ -40,7 +40,7 @@ class UserModel {
     return UserModel(
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      uid: map['uid'] ?? '',
+      uId: map['uId'] ?? '',
       role: map['role'],
     );
   }
@@ -52,7 +52,7 @@ class UserModel {
 
   @override
   String toString() =>
-      'UserModel(name: $name, email: $email, uid: $uid, role: $role)';
+      'UserModel(name: $name, email: $email, uId: $uId, role: $role)';
 
   @override
   bool operator ==(Object other) {
@@ -61,15 +61,13 @@ class UserModel {
     return other is UserModel &&
         other.name == name &&
         other.email == email &&
-        other.uid == uid &&
+        other.uId == uId &&
         other.role == role;
   }
 
   @override
   int get hashCode =>
-      name.hashCode ^ email.hashCode ^ uid.hashCode ^ role.hashCode;
+      name.hashCode ^ email.hashCode ^ uId.hashCode ^ role.hashCode;
 
-  static UserModel? fromFirebaseUser(User user) {
-    return null;
-  }
+  static UserModel? fromFirebaseUser(User user) {}
 }

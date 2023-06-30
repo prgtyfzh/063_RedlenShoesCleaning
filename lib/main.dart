@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:redlenshoescleaning/view/dashboarduser.dart';
 import 'package:redlenshoescleaning/view/loginpage.dart';
 
 Future main() async {
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: DashboardUser(),
+      home: const LoginPage(),
     );
   }
 }

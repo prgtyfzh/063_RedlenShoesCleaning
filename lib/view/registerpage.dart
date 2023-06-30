@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:redlenshoescleaning/controller/authcontroller.dart';
+import 'package:redlenshoescleaning/model/usermodel.dart';
+import 'package:redlenshoescleaning/view/loginpage.dart';
 
-import '../controller/authcontroller.dart';
-import '../model/usermodel.dart';
-import 'loginpage.dart';
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
-class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
 
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final authController = AuthController();
+  final _passwordController = TextEditingController();
+
+  String? name;
+  String? email;
+  String? password;
+  String? confirmPassword;
 
   @override
   Widget build(BuildContext context) {
-    String? name;
-    String? email;
-    String? password;
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -63,8 +69,16 @@ class RegisterPage extends StatelessWidget {
                             hintText: 'Name',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your name';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
-                            name = value;
+                            setState(() {
+                              name = value;
+                            });
                           },
                         ),
                       ),
@@ -89,8 +103,18 @@ class RegisterPage extends StatelessWidget {
                             hintText: 'Email',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            } else if (!value.contains('@')) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
-                            email = value;
+                            setState(() {
+                              email = value;
+                            });
                           },
                         ),
                       ),
@@ -111,14 +135,25 @@ class RegisterPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
+                          controller: _passwordController,
                           obscureText: true,
                           decoration: const InputDecoration(
                             hintText: 'Password',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
-                            password = value;
+                            setState(() {
+                              password = value;
+                            });
                           },
                         ),
                       ),
@@ -145,8 +180,19 @@ class RegisterPage extends StatelessWidget {
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: Icon(Icons.remove_red_eye),
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            if (value != _passwordController.text) {
+                              return 'Password must be the same';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
-                            password = value;
+                            setState(() {
+                              confirmPassword = value;
+                            });
                           },
                         ),
                       ),
@@ -154,55 +200,72 @@ class RegisterPage extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            UserModel? registeredUser = await authController
-                                .registerWithEmailAndPassword(
-                                    email!, password!, name!);
-                            if (registeredUser != null) {
-                              // Registration successfull
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title:
-                                        const Text('Registration Successful'),
-                                    content: const Text(
-                                        'You have been successfully registered.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return LoginPage();
-                                          }));
-                                          // Navigate to the next screen or perform any desired action
-                                        },
-                                        child: const Text('OK'),
+                            if (password == confirmPassword) {
+                              UserModel? registeredUser = await authController
+                                  .registerWithEmailAndPassword(
+                                      email!, password!, name!);
+                              if (registeredUser != null) {
+                                // Registration successful
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Theme(
+                                      data: ThemeData(
+                                        // Customize the color of the dialog background
+                                        dialogBackgroundColor:
+                                            Color(0xFFD9D9D9),
                                       ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } else {
-                              // Registration failed
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Registration Failed'),
-                                    content: const Text(
-                                        'An error occured during registration.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('OK'),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                            'Registration Successful'),
+                                        content: const Text(
+                                            'You have been successfully registered.'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const LoginPage();
+                                              }));
+                                              // Navigate to the next screen or perform any desired action
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  );
-                                },
-                              );
+                                    );
+                                  },
+                                );
+                              } else {
+                                // Registration failed
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Theme(
+                                      data: ThemeData(
+                                        // Customize the color of the dialog background
+                                        dialogBackgroundColor:
+                                            Color(0xFFD9D9D9),
+                                      ),
+                                      child: AlertDialog(
+                                        title:
+                                            const Text('Registration Failed'),
+                                        content: const Text(
+                                            'An error occurred during registration.'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
                             }
                           }
                         },
@@ -230,7 +293,7 @@ class RegisterPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
+                                  builder: (context) => const LoginPage(),
                                 ),
                               );
                             },
