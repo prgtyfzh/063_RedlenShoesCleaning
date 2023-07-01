@@ -3,6 +3,7 @@ import 'package:redlenshoescleaning/view/admin/pengeluaran/createpengeluaran.dar
 import 'package:redlenshoescleaning/view/admin/pengeluaran/pengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
+import 'package:redlenshoescleaning/view/laporanpage.dart';
 
 class DashboardAdmin extends StatefulWidget {
   const DashboardAdmin({Key? key}) : super(key: key);
@@ -66,71 +67,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   Widget _buildPage(int index) {
     switch (index) {
       case 0:
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            width: 350,
-            height: 300,
-            decoration: BoxDecoration(
-              color: const Color(0xFFD9D9D9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Pendapatan',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 85),
-                      Text(
-                        'Pengeluaran',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildDecorationBox(Colors.white),
-                      const SizedBox(width: 20),
-                      _buildDecorationBox(Colors.white),
-                    ],
-                  ),
-                  const SizedBox(height: 65),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Laba',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 140),
-                      Text(
-                        'Rugi',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildDecorationBox(Colors.white),
-                      const SizedBox(width: 20),
-                      _buildDecorationBox(Colors.white),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return const LaporanPage();
       case 1:
         return Scaffold(
           body: Column(
@@ -191,17 +128,5 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           child: Text('Unknown Page'),
         );
     }
-  }
-
-  Widget _buildDecorationBox(Color color) {
-    return Container(
-      width: 150,
-      height: 35,
-      decoration: BoxDecoration(
-        color: color,
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
   }
 }
