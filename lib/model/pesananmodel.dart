@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-class PengeluaranModel {
+class PesananModel {
   String? id;
   final String selectedDate;
   final String namapemilik;
   final String notelepon;
   final String sepatu;
-  final String jenistreatment;
   final String harga;
-  final String status;
-  PengeluaranModel({
+  String? status;
+  final String listitem;
+  PesananModel({
     this.id,
     required this.selectedDate,
     required this.namapemilik,
     required this.notelepon,
     required this.sepatu,
-    required this.jenistreatment,
     required this.harga,
-    required this.status,
+    this.status,
+    required this.listitem,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,27 +27,27 @@ class PengeluaranModel {
       'namapemilik': namapemilik,
       'notelepon': notelepon,
       'sepatu': sepatu,
-      'jenistreatment': jenistreatment,
       'harga': harga,
       'status': status,
+      'listitem': listitem,
     };
   }
 
-  factory PengeluaranModel.fromMap(Map<String, dynamic> map) {
-    return PengeluaranModel(
+  factory PesananModel.fromMap(Map<String, dynamic> map) {
+    return PesananModel(
       id: map['id'],
       selectedDate: map['selectedDate'] ?? '',
       namapemilik: map['namapemilik'] ?? '',
       notelepon: map['notelepon'] ?? '',
       sepatu: map['sepatu'] ?? '',
-      jenistreatment: map['jenistreatment'] ?? '',
       harga: map['harga'] ?? '',
-      status: map['status'] ?? '',
+      status: map['status'],
+      listitem: map['listitem'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory PengeluaranModel.fromJson(String source) =>
-      PengeluaranModel.fromMap(json.decode(source));
+  factory PesananModel.fromJson(String source) =>
+      PesananModel.fromMap(json.decode(source));
 }

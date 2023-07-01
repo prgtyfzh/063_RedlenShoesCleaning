@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:redlenshoescleaning/controller/pesanancontroller.dart';
+import 'package:redlenshoescleaning/model/pesananmodel.dart';
+import 'package:redlenshoescleaning/view/user/dashboarduser.dart';
 
 class CreatePesanan extends StatefulWidget {
   const CreatePesanan({super.key});
@@ -9,15 +14,39 @@ class CreatePesanan extends StatefulWidget {
 }
 
 class _CreatePesananState extends State<CreatePesanan> {
+  final _formKey = GlobalKey<FormState>();
+  final pesananController = PesananController();
+
+  String? selectedDate;
+  String? namapemilik;
+  String? notelepon;
+  String? sepatu;
+  String? harga;
+  String? listitem;
+
+  final TextEditingController hargaController = TextEditingController();
+
   final TextEditingController _tanggalController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardUser(),
+              ),
+            );
+          },
+        ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
-          'Tambah Pesanan',
+          'Tambahkan Pesanan',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
           ),
@@ -25,16 +54,18 @@ class _CreatePesananState extends State<CreatePesanan> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                width: 350,
-                height: 800,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+            child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              width: 350,
+              height: 700,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Form(
+                key: _formKey,
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +78,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Tanggal', // Teks di atas TextFormField
+                            'Tanggal',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -60,9 +91,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                         width: 300,
                         height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
+                          controller: _tanggalController,
                           decoration: InputDecoration(
-                            hintText: 'Tanggal',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -70,25 +100,27 @@ class _CreatePesananState extends State<CreatePesanan> {
                             fillColor: Colors.white,
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.calendar_today),
-                              onPressed: () {
-                                // DatePicker.showDatePicker(
-                                //   context,
-                                //   showTitleActions: true,
-                                //   minTime: DateTime(2000, 1, 1),
-                                //   maxTime: DateTime(2030, 12, 31),
-                                //   onConfirm: (date) {
-                                //     _tanggalController.text = date
-                                //         .toString(); // Atur nilai teks sesuai tanggal yang dipilih
-                                //   },
-                                //   currentTime: DateTime.now(),
-                                //   locale: LocaleType.en,
-                                // );
+                              onPressed: () async {
+                                DateTime? tanggal = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+
+                                if (tanggal != null) {
+                                  selectedDate =
+                                      DateFormat('dd-MM-yyyy').format(tanggal);
+
+                                  setState(() {
+                                    _tanggalController.text =
+                                        selectedDate.toString();
+                                  });
+                                }
                               },
                             ),
                           ),
-                          readOnly: true, // Disable manual text input
-                          controller:
-                              _tanggalController, // Use a TextEditingController to control the text field value
+                          readOnly: true,
                         ),
                       ),
                       const Padding(
@@ -99,7 +131,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Nama Pemilik', // Teks di atas TextFormField
+                            'Nama Pemilik',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -121,6 +153,9 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          onChanged: (value) {
+                            namapemilik = value;
+                          },
                         ),
                       ),
                       const Padding(
@@ -131,7 +166,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'No. Telepon', // Teks di atas TextFormField
+                            'No. Telepon',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -153,6 +188,9 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          onChanged: (value) {
+                            notelepon = value;
+                          },
                         ),
                       ),
                       const Padding(
@@ -163,7 +201,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Sepatu', // Teks di atas TextFormField
+                            'Sepatu',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -185,6 +223,9 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          onChanged: (value) {
+                            sepatu = value;
+                          },
                         ),
                       ),
                       const Padding(
@@ -195,7 +236,73 @@ class _CreatePesananState extends State<CreatePesanan> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Jenis Treatment', // Teks di atas TextFormField
+                            'Jenis Treatment',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('treatments')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            List<DropdownMenuItem<String>> dropdownItems = [];
+                            final items = snapshot.data!.docs;
+                            for (var item in items) {
+                              // Assuming the 'jenistreatment' field exists in each document
+                              String itemName = item['jenistreatment'];
+                              dropdownItems.add(
+                                DropdownMenuItem(
+                                  value: itemName,
+                                  child: Text(itemName),
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              width: 300,
+                              height: 60,
+                              child: DropdownButtonFormField<String>(
+                                borderRadius: BorderRadius.circular(10.0),
+                                icon: const Icon(
+                                    Icons.arrow_drop_down_circle_rounded),
+                                value: listitem,
+                                items: dropdownItems,
+                                onChanged: (item) async {
+                                  setState(() {
+                                    listitem = item;
+                                  });
+                                  harga = await getHargaByItem(
+                                      item!); // Fetch the harga for the selected item
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Jenis Treatment',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 30.0,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Harga',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -207,100 +314,57 @@ class _CreatePesananState extends State<CreatePesanan> {
                       SizedBox(
                         width: 300,
                         height: 50,
-                        child: TextFormField(
-                          // controller: _tanggalController,
-                          decoration: InputDecoration(
-                            hintText: 'Jenis Treatment',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 30.0,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Harga', // Teks di atas TextFormField
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: TextFormField(
-                          // controller: _tanggalController,
-                          decoration: InputDecoration(
-                            hintText: 'Harga',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 30.0,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Status', // Teks di atas TextFormField
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: TextFormField(
-                          // controller: _tanggalController,
-                          decoration: InputDecoration(
-                            hintText: 'Status',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
+                        child: FutureBuilder<String?>(
+                          future: listitem != null
+                              ? getHargaByItem(listitem!)
+                              : null,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else {
+                              String harga = snapshot.data ?? '';
+                              return TextFormField(
+                                initialValue: harga,
+                                decoration: InputDecoration(
+                                  hintText: 'Harga',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                                readOnly: true,
+                              );
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(height: 40),
                       ElevatedButton(
                         onPressed: () {
-                          // Retrieve the values from the text fields
-                          // String tanggal = _tanggalController.text;
-                          // String nama = _namaController.text;
-                          // String harga = _hargaController.text;
-
-                          // Do something with the data (e.g., add it to a list, save to a database, etc.)
-                          // ...
-
-                          // Clear the text fields
-                          // _tanggalController.clear();
-                          // _namaController.clear();
-                          // _hargaController.clear();
-
-                          // Show a snackbar or navigate to a new screen to indicate successful data submission
-                          // ...
+                          if (_formKey.currentState!.validate()) {
+                            PesananModel pesm = PesananModel(
+                              selectedDate: selectedDate!,
+                              namapemilik: namapemilik!,
+                              notelepon: notelepon!,
+                              sepatu: sepatu!,
+                              listitem: listitem!,
+                              harga: harga!, // Use the harga value here
+                            );
+                            pesananController.addPesanan(pesm);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Pengeluaran Ditambahkan'),
+                              ),
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DashboardUser(),
+                              ),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF454BE0),
@@ -323,8 +387,27 @@ class _CreatePesananState extends State<CreatePesanan> {
               ),
             ),
           ),
-        ),
+        )),
       ),
     );
+  }
+
+  Future<String?> getHargaByItem(String selectedItem) async {
+    try {
+      // Perform a query to get the harga from Firestore based on the selected item
+      var snapshot = await FirebaseFirestore.instance
+          .collection('treatments')
+          .where('jenistreatment', isEqualTo: selectedItem)
+          .get();
+
+      // Assuming the 'harga' field exists in each document
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first['harga'].toString();
+      }
+    } catch (e) {
+      print('Error fetching harga: $e');
+    }
+
+    return null;
   }
 }
