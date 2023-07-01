@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/view/user/createpesanan.dart';
 import 'package:redlenshoescleaning/view/user/detailpesanan.dart';
 
+import '../../controller/authcontroller.dart';
+import '../loginpage.dart';
+
 class DashboardUser extends StatefulWidget {
   const DashboardUser({super.key});
 
@@ -11,10 +14,23 @@ class DashboardUser extends StatefulWidget {
 }
 
 class _DashboardUserState extends State<DashboardUser> {
+  final AuthController authController = AuthController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              authController.signOut();
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const LoginPage();
+              }));
+            },
+          ),
+        ],
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(

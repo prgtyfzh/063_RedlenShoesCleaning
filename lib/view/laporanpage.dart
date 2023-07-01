@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/view/loginpage.dart';
+
+import '../controller/authcontroller.dart';
 
 class LaporanPage extends StatefulWidget {
   const LaporanPage({super.key});
@@ -9,10 +12,23 @@ class LaporanPage extends StatefulWidget {
 }
 
 class _LaporanPageState extends State<LaporanPage> {
+  final AuthController authController = AuthController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              authController.signOut();
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const LoginPage();
+              }));
+            },
+          ),
+        ],
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
