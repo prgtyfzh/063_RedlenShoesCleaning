@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:redlenshoescleaning/view/admin/pengeluaran/createpengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/pengeluaran.dart';
-import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 import 'package:redlenshoescleaning/view/laporanpage.dart';
+import 'package:redlenshoescleaning/view/pesananpage.dart';
 
 class DashboardAdmin extends StatefulWidget {
   const DashboardAdmin({Key? key}) : super(key: key);
@@ -42,7 +41,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.trending_up_sharp),
-                label: 'Pendapatan',
+                label: 'Pesanan',
                 backgroundColor: Color(0xFFD9D9D9),
               ),
               BottomNavigationBarItem(
@@ -69,55 +68,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       case 0:
         return const LaporanPage();
       case 1:
-        return Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5.0, horizontal: 20.0),
-                      child: InkWell(
-                        onLongPress: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => UpdateContact(
-                          //       id: data[index]['id'],
-                          //       name: data[index]['name'],
-                          //       phone: data[index]['phone'],
-                          //       email: data[index]['email'],
-                          //       address: data[index]['address'],
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                        child: const Card(
-                          color: Color(0xFFD9D9D9),
-                          elevation: 4,
-                          child: ListTile(
-                            title: Text('Tanggal'),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Sepatu'),
-                                Text('Nama Treatment'),
-                                Text('Harga'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-
+        return const PesananPage();
       case 2:
         return const Pengeluaran();
       case 3:
