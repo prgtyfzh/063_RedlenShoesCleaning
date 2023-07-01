@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:redlenshoescleaning/controller/pengeluarancontroller.dart';
+import 'package:redlenshoescleaning/model/pengeluaranmodel.dart';
 import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
+import 'package:redlenshoescleaning/view/admin/pengeluaran/pengeluaran.dart';
 
 class UpdatePengeluaran extends StatefulWidget {
-  const UpdatePengeluaran({super.key});
+  const UpdatePengeluaran({
+    Key? key,
+    this.id,
+    this.selectedDate,
+    this.namabarang,
+    this.hargabarang,
+  }) : super(key: key);
+
+  final String? id;
+  final String? selectedDate;
+  final String? namabarang;
+  final String? hargabarang;
 
   @override
   State<UpdatePengeluaran> createState() => _UpdatePengeluaranState();
 }
 
 class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
+  var pengeluaranController = PengeluaranController();
+
+  final _formkey = GlobalKey<FormState>();
+
+  String? newselectedDate;
+  String? newnamabarang;
+  String? newhargabarang;
+
   final TextEditingController _tanggalController = TextEditingController();
 
   @override
@@ -37,172 +60,195 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
           ),
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            width: 350,
-            height: 420,
-            decoration: BoxDecoration(
-              color: const Color(0xFFD9D9D9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 30.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Tanggal', // Teks di atas TextFormField
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                width: 350,
+                height: 420,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Form(
+                  key: _formkey,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Tanggal',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: TextFormField(
-                      // controller: _tanggalController,
-                      decoration: InputDecoration(
-                        hintText: 'Tanggal',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                        SizedBox(
+                          width: 300,
+                          height: 50,
+                          child: TextFormField(
+                            // controller: _tanggalController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.calendar_today),
+                                onPressed: () async {
+                                  DateTime? tanggal = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+
+                                  if (tanggal != null) {
+                                    newselectedDate = DateFormat('dd-MM-yyyy')
+                                        .format(tanggal)
+                                        .toString();
+
+                                    setState(() {
+                                      _tanggalController.text =
+                                          newselectedDate!;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            onSaved: (value) {
+                              newselectedDate = value;
+                            },
+                            initialValue: widget.selectedDate,
+                            readOnly: true,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Nama Barang',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 50,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                            onSaved: (value) {
+                              newnamabarang = value;
+                            },
+                            initialValue: widget.namabarang,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Harga Barang',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 50,
+                          child: TextFormField(
+                            // controller: _tanggalController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                            onSaved: (value) {
+                              newhargabarang = value;
+                            },
+                            initialValue: widget.hargabarang,
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        ElevatedButton(
                           onPressed: () {
-                            // DatePicker.showDatePicker(
-                            //   context,
-                            //   showTitleActions: true,
-                            //   minTime: DateTime(2000, 1, 1),
-                            //   maxTime: DateTime(2030, 12, 31),
-                            //   onConfirm: (date) {
-                            //     _tanggalController.text = date
-                            //         .toString(); // Atur nilai teks sesuai tanggal yang dipilih
-                            //   },
-                            //   currentTime: DateTime.now(),
-                            //   locale: LocaleType.en,
-                            // );
+                            if (_formkey.currentState!.validate()) {
+                              _formkey.currentState!.save();
+                              PengeluaranModel pm = PengeluaranModel(
+                                id: widget.id,
+                                selectedDate: newselectedDate!.toString(),
+                                namabarang: newnamabarang!.toString(),
+                                hargabarang: newhargabarang!.toString(),
+                              );
+                              pengeluaranController.updatePengeluaran(pm);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Pengeluaran Berubah'),
+                                ),
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Pengeluaran(),
+                                ),
+                              );
+                            }
                           },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF454BE0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            minimumSize: const Size(150, 50),
+                          ),
+                          child: const Text(
+                            'Simpan',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                      readOnly: true, // Disable manual text input
-                      controller:
-                          _tanggalController, // Use a TextEditingController to control the text field value
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 30.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Nama Barang', // Teks di atas TextFormField
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: TextFormField(
-                      // controller: _tanggalController,
-                      decoration: InputDecoration(
-                        hintText: 'Nama Barang',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 30.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Harga', // Teks di atas TextFormField
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: TextFormField(
-                      // controller: _tanggalController,
-                      decoration: InputDecoration(
-                        hintText: 'Harga',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Retrieve the values from the text fields
-                      // String tanggal = _tanggalController.text;
-                      // String nama = _namaController.text;
-                      // String harga = _hargaController.text;
-
-                      // Do something with the data (e.g., add it to a list, save to a database, etc.)
-                      // ...
-
-                      // Clear the text fields
-                      // _tanggalController.clear();
-                      // _namaController.clear();
-                      // _hargaController.clear();
-
-                      // Show a snackbar or navigate to a new screen to indicate successful data submission
-                      // ...
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF454BE0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      minimumSize: const Size(150, 50),
-                    ),
-                    child: const Text(
-                      'Simpan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

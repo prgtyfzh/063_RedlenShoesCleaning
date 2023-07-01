@@ -2,12 +2,12 @@ import 'dart:convert';
 
 class PengeluaranModel {
   String? id;
-  final DateTime tanggal;
+  final String selectedDate;
   final String namabarang;
   final String hargabarang;
   PengeluaranModel({
     this.id,
-    required this.tanggal,
+    required this.selectedDate,
     required this.namabarang,
     required this.hargabarang,
   });
@@ -15,7 +15,7 @@ class PengeluaranModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'tanggal': tanggal.millisecondsSinceEpoch,
+      'selectedDate': selectedDate,
       'namabarang': namabarang,
       'hargabarang': hargabarang,
     };
@@ -24,7 +24,7 @@ class PengeluaranModel {
   factory PengeluaranModel.fromMap(Map<String, dynamic> map) {
     return PengeluaranModel(
       id: map['id'],
-      tanggal: DateTime.fromMillisecondsSinceEpoch(map['tanggal']),
+      selectedDate: map['selectedDate'] ?? '',
       namabarang: map['namabarang'] ?? '',
       hargabarang: map['hargabarang'] ?? '',
     );
