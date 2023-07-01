@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/model/treatmentmodel.dart';
 import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
+import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 
 class CreateTreatment extends StatefulWidget {
   const CreateTreatment({super.key});
@@ -22,6 +23,18 @@ class _CreateTreatmentState extends State<CreateTreatment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardAdmin(),
+              ),
+            );
+          },
+        ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
@@ -127,12 +140,12 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Treatment Added')));
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const DashboardAdmin(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Treatment(),
+                              ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(

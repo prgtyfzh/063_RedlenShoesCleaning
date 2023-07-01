@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/model/treatmentmodel.dart';
 import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
+import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 
 class UpdateTreatment extends StatefulWidget {
   const UpdateTreatment({
@@ -32,6 +33,18 @@ class _UpdateTreatmentState extends State<UpdateTreatment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardAdmin(),
+              ),
+            );
+          },
+        ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
@@ -140,13 +153,13 @@ class _UpdateTreatmentState extends State<UpdateTreatment> {
                             treatmentController.updateTreatment(tm);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Contact Changed')));
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const DashboardAdmin(),
-                            //   ),
-                            // );
+                                    content: Text('Treatment Changed')));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Treatment(),
+                              ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(

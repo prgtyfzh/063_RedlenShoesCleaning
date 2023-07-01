@@ -1,68 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/createpengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dart';
-import 'package:redlenshoescleaning/view/admin/treatment/createtreatment.dart';
-import 'package:redlenshoescleaning/view/admin/treatment/updatetreatment.dart';
+import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 
 class DashboardAdmin extends StatefulWidget {
-  const DashboardAdmin(int i, {Key? key, required int selectedIndex})
-      : super(key: key);
+  const DashboardAdmin({Key? key}) : super(key: key);
 
   @override
   State<DashboardAdmin> createState() => _DashboardAdminState();
 }
 
 class _DashboardAdminState extends State<DashboardAdmin> {
-  var tc = TreatmentController();
-
-  @override
-  void initState() {
-    tc.getTreatment();
-    super.initState();
-  }
-
   int _selectedIndex = 0;
-  String appBarTitle = 'REDLEN APPS'; // Teks AppBar default
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      appBarTitle = _getAppBarTitle(
-          index); // Mendapatkan teks AppBar yang sesuai dengan index
     });
-  }
-
-  String _getAppBarTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'REDLEN APPS';
-      case 1:
-        return 'Daftar Pendapatan';
-      case 2:
-        return 'Daftar Pengeluaran';
-      case 3:
-        return 'Daftar Treatment';
-      default:
-        return 'REDLEN APPS';
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFD9D9D9),
-        centerTitle: true,
-        title: Text(
-          appBarTitle,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: Center(
         child: _buildPage(_selectedIndex),
       ),
@@ -304,88 +263,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           ),
         );
       case 3:
-        return Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: StreamBuilder<List<DocumentSnapshot>>(
-                  stream: tc.stream,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final List<DocumentSnapshot> data = snapshot.data!;
-
-                    return ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5.0,
-                            horizontal: 20.0,
-                          ),
-                          child: Card(
-                            color: const Color(0xFFD9D9D9),
-                            elevation: 4,
-                            child: ListTile(
-                              title: Text(data[index]['jenistreatment']),
-                              subtitle: Text(data[index]['harga']),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => UpdateTreatment(
-                                            id: data[index]['id'],
-                                            jenistreatment: data[index]
-                                                ['jenistreatment'],
-                                            harga: data[index]['harga'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      tc.removeTreatment(
-                                          data[index]['id'].toString());
-                                      setState(() {
-                                        tc.getTreatment();
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateTreatment(),
-                ),
-              );
-            },
-            backgroundColor: const Color(0xFFD9D9D9),
-            child: const Icon(Icons.add),
-          ),
-        );
+        return const Treatment();
       default:
         return const Padding(
           padding: EdgeInsets.all(20),
