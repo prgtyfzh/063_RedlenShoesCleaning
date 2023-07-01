@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
 
 class UpdatePengeluaran extends StatefulWidget {
   const UpdatePengeluaran({super.key});
@@ -15,10 +16,22 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardAdmin(),
+              ),
+            );
+          },
+        ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
-          'Update Pengeluaran',
+          'Edit Pengeluaran',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
           ),

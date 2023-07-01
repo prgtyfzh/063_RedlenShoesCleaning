@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
 
 class CreatePengeluaran extends StatefulWidget {
   const CreatePengeluaran({super.key});
@@ -15,10 +16,22 @@ class _CreatePengeluaranState extends State<CreatePengeluaran> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardAdmin(),
+              ),
+            );
+          },
+        ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
-          'REDLEN APPS',
+          'Tambahkan Pengeluaran',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
           ),

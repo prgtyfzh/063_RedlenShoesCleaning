@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/createpengeluaran.dart';
+import 'package:redlenshoescleaning/view/admin/pengeluaran/pengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 
@@ -181,87 +182,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         );
 
       case 2:
-        return Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5.0,
-                        horizontal: 20.0,
-                      ),
-                      child: Card(
-                        color: const Color(0xFFD9D9D9),
-                        elevation: 4,
-                        child: ListTile(
-                          title: const Text('Tanggal'),
-                          subtitle: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Nama Barang'),
-                              Text('Harga'),
-                            ],
-                          ),
-                          trailing: PopupMenuButton<String>(
-                            icon: const Icon(
-                              Icons.more_vert,
-                              size: 25,
-                            ),
-                            onSelected: (value) {
-                              if (value == 'edit') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const UpdatePengeluaran(
-                                            // id: data[index]['id'],
-                                            // name: data[index]['name'],
-                                            // phone: data[index]['phone'],
-                                            // email: data[index]['email'],
-                                            // address: data[index]['address'],
-                                            ),
-                                  ),
-                                );
-                              } else if (value == 'delete') {
-                                // Handle delete action
-                                // ...
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreatePengeluaran(),
-                ),
-              );
-            },
-            backgroundColor: const Color(0xFFD9D9D9),
-            child: const Icon(Icons.add),
-          ),
-        );
+        return const Pengeluaran();
       case 3:
         return const Treatment();
       default:
