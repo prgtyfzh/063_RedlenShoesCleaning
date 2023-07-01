@@ -1,18 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/createpengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/createtreatment.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/updatetreatment.dart';
 
 class DashboardAdmin extends StatefulWidget {
-  const DashboardAdmin({Key? key}) : super(key: key);
+  const DashboardAdmin(int i, {Key? key, required int selectedIndex})
+      : super(key: key);
 
   @override
   State<DashboardAdmin> createState() => _DashboardAdminState();
 }
 
 class _DashboardAdminState extends State<DashboardAdmin> {
+  var tc = TreatmentController();
+
+  @override
+  void initState() {
+    tc.getTreatment();
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   String appBarTitle = 'REDLEN APPS'; // Teks AppBar default
 
@@ -297,61 +308,65 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           body: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5.0,
-                        horizontal: 20.0,
-                      ),
-                      child: InkWell(
-                        onLongPress: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => UpdateContact(
-                          //       id: data[index]['id'],
-                          //       name: data[index]['name'],
-                          //       phone: data[index]['phone'],
-                          //       email: data[index]['email'],
-                          //       address: data[index]['address'],
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                        child: Card(
-                          color: const Color(0xFFD9D9D9),
-                          elevation: 4,
-                          child: ListTile(
-                            title: const Text('Nama Treatment'),
-                            subtitle: const Text('Harga'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const UpdateTreatment(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    // Handle delete button press
-                                  },
-                                ),
-                              ],
+                child: StreamBuilder<List<DocumentSnapshot>>(
+                  stream: tc.stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final List<DocumentSnapshot> data = snapshot.data!;
+
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5.0,
+                            horizontal: 20.0,
+                          ),
+                          child: Card(
+                            color: const Color(0xFFD9D9D9),
+                            elevation: 4,
+                            child: ListTile(
+                              title: Text(data[index]['jenistreatment']),
+                              subtitle: Text(data[index]['harga']),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UpdateTreatment(
+                                            id: data[index]['id'],
+                                            jenistreatment: data[index]
+                                                ['jenistreatment'],
+                                            harga: data[index]['harga'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      tc.removeTreatment(
+                                          data[index]['id'].toString());
+                                      setState(() {
+                                        tc.getTreatment();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),

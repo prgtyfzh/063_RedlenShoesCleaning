@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
+import 'package:redlenshoescleaning/model/treatmentmodel.dart';
+import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
 
 class UpdateTreatment extends StatefulWidget {
-  const UpdateTreatment({super.key});
+  const UpdateTreatment({
+    Key? key,
+    this.id,
+    this.jenistreatment,
+    this.harga,
+  }) : super(key: key);
+
+  final String? id;
+  final String? jenistreatment;
+  final String? harga;
 
   @override
   State<UpdateTreatment> createState() => _UpdateTreatmentState();
 }
 
 class _UpdateTreatmentState extends State<UpdateTreatment> {
+  var treatmentController = TreatmentController();
+
+  final _formkey = GlobalKey<FormState>();
+
+  String? newjenistreatment;
+  String? newharga;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,118 +45,129 @@ class _UpdateTreatmentState extends State<UpdateTreatment> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Container(
-            width: 350,
-            height: 370,
-            decoration: BoxDecoration(
-              color: const Color(0xFFD9D9D9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 30.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Nama Barang', // Teks di atas TextFormField
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: TextFormField(
-                      // controller: _tanggalController,
-                      decoration: InputDecoration(
-                        hintText: 'Nama Barang',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 30.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Harga', // Teks di atas TextFormField
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: TextFormField(
-                      // controller: _tanggalController,
-                      decoration: InputDecoration(
-                        hintText: 'Harga',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Retrieve the values from the text fields
-                      // String tanggal = _tanggalController.text;
-                      // String nama = _namaController.text;
-                      // String harga = _hargaController.text;
-
-                      // Do something with the data (e.g., add it to a list, save to a database, etc.)
-                      // ...
-
-                      // Clear the text fields
-                      // _tanggalController.clear();
-                      // _namaController.clear();
-                      // _hargaController.clear();
-
-                      // Show a snackbar or navigate to a new screen to indicate successful data submission
-                      // ...
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF454BE0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      minimumSize: const Size(150, 50),
-                    ),
-                    child: const Text(
-                      'Simpan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+              width: 350,
+              height: 370,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-          ),
+              child: Form(
+                key: _formkey,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 30.0,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Jenis Treatment',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 300,
+                        height: 50,
+                        child: TextFormField(
+                          // controller: _tanggalController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          onSaved: (value) {
+                            newjenistreatment = value;
+                          },
+                          initialValue: widget.jenistreatment,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 30.0,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Harga',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 300,
+                        height: 50,
+                        child: TextFormField(
+                          // controller: _tanggalController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          onSaved: (value) {
+                            newharga = value;
+                          },
+                          initialValue: widget.harga,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formkey.currentState!.validate()) {
+                            _formkey.currentState!.save();
+                            TreatmentModel tm = TreatmentModel(
+                              id: widget.id,
+                              jenistreatment: newjenistreatment!.toString(),
+                              harga: newharga!.toString(),
+                            );
+                            treatmentController.updateTreatment(tm);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Contact Changed')));
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const DashboardAdmin(),
+                            //   ),
+                            // );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF454BE0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          minimumSize: const Size(150, 50),
+                        ),
+                        child: const Text(
+                          'Simpan',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         ),
       ),
     );
