@@ -55,4 +55,6 @@ class PesananController {
     streamController.sink.add(pesanan.docs);
     return pesanan.docs;
   }
+
+  void getPesananByUser(String uid) {}
 }

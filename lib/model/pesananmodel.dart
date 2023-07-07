@@ -7,7 +7,7 @@ class PesananModel {
   final String notelepon;
   final String sepatu;
   final String harga;
-  String? status;
+  final String status;
   final String listitem;
   PesananModel({
     this.id,
@@ -16,7 +16,7 @@ class PesananModel {
     required this.notelepon,
     required this.sepatu,
     required this.harga,
-    this.status,
+    required this.status,
     required this.listitem,
   });
 

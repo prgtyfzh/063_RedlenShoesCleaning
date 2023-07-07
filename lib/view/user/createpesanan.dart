@@ -7,7 +7,7 @@ import 'package:redlenshoescleaning/model/pesananmodel.dart';
 import 'package:redlenshoescleaning/view/user/dashboarduser.dart';
 
 class CreatePesanan extends StatefulWidget {
-  const CreatePesanan({super.key});
+  const CreatePesanan({Key? key}) : super(key: key);
 
   @override
   State<CreatePesanan> createState() => _CreatePesananState();
@@ -27,6 +27,7 @@ class _CreatePesananState extends State<CreatePesanan> {
   final TextEditingController hargaController = TextEditingController();
 
   final TextEditingController _tanggalController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +145,6 @@ class _CreatePesananState extends State<CreatePesanan> {
                         width: 300,
                         height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
                           decoration: InputDecoration(
                             hintText: 'Nama Pemilik',
                             border: OutlineInputBorder(
@@ -179,7 +179,6 @@ class _CreatePesananState extends State<CreatePesanan> {
                         width: 300,
                         height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
                           decoration: InputDecoration(
                             hintText: 'No. Telepon',
                             border: OutlineInputBorder(
@@ -214,7 +213,6 @@ class _CreatePesananState extends State<CreatePesanan> {
                         width: 300,
                         height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
                           decoration: InputDecoration(
                             hintText: 'Sepatu',
                             border: OutlineInputBorder(
@@ -257,7 +255,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                             final items = snapshot.data!.docs;
                             for (var item in items) {
                               // Assuming the 'jenistreatment' field exists in each document
-                              String itemName = item['jenistreatment'];
+                              String itemName = item['listitem'];
                               dropdownItems.add(
                                 DropdownMenuItem(
                                   value: itemName,
@@ -345,17 +343,17 @@ class _CreatePesananState extends State<CreatePesanan> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             PesananModel pesm = PesananModel(
-                              selectedDate: selectedDate!,
-                              namapemilik: namapemilik!,
-                              notelepon: notelepon!,
-                              sepatu: sepatu!,
-                              listitem: listitem!,
-                              harga: harga!, // Use the harga value here
-                            );
+                                selectedDate: selectedDate!,
+                                namapemilik: namapemilik!,
+                                notelepon: notelepon!,
+                                sepatu: sepatu!,
+                                listitem: listitem!,
+                                harga: harga!,
+                                status: "pending");
                             pesananController.addPesanan(pesm);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Pengeluaran Ditambahkan'),
+                                content: Text('Pesanan Ditambahkan'),
                               ),
                             );
                             Navigator.push(
@@ -411,3 +409,437 @@ class _CreatePesananState extends State<CreatePesanan> {
     return null;
   }
 }
+
+Future<String?> getHargaByItem(String selectedItem) async {
+  try {
+    // Perform a query to get the harga from Firestore based on the selected item
+    var snapshot = await FirebaseFirestore.instance
+        .collection('treatments')
+        .where('jenistreatment', isEqualTo: selectedItem)
+        .get();
+
+    // Assuming the 'harga' field exists in each document
+    if (snapshot.docs.isNotEmpty) {
+      return snapshot.docs.first['harga'].toString();
+    }
+  } catch (e) {
+    print('Error fetching harga: $e');
+  }
+
+  return null;
+}
+
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import 'package:intl/intl.dart';
+// import 'package:redlenshoescleaning/controller/pesanancontroller.dart';
+// import 'package:redlenshoescleaning/model/pesananmodel.dart';
+// import 'package:redlenshoescleaning/view/user/dashboarduser.dart';
+
+// class CreatePesanan extends StatefulWidget {
+//   const CreatePesanan({super.key});
+
+//   @override
+//   State<CreatePesanan> createState() => _CreatePesananState();
+// }
+
+// class _CreatePesananState extends State<CreatePesanan> {
+//   final _formKey = GlobalKey<FormState>();
+//   final pesananController = PesananController();
+
+//   String? selectedDate;
+//   String? namapemilik;
+//   String? notelepon;
+//   String? sepatu;
+//   String? harga;
+//   String? listitem;
+
+//   final TextEditingController hargaController = TextEditingController();
+
+//   final TextEditingController _tanggalController = TextEditingController();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         leading: IconButton(
+//           icon: const Icon(Icons.arrow_back),
+//           onPressed: () {
+//             Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                 builder: (context) => const DashboardUser(),
+//               ),
+//             );
+//           },
+//         ),
+//         automaticallyImplyLeading: false,
+//         backgroundColor: const Color(0xFFD9D9D9),
+//         centerTitle: true,
+//         title: Text(
+//           'Tambahkan Pesanan',
+//           style: GoogleFonts.inter(
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ),
+//       body: SafeArea(
+//         child: SingleChildScrollView(
+//             child: Center(
+//           child: Padding(
+//             padding: const EdgeInsets.all(20.0),
+//             child: Container(
+//               width: 350,
+//               height: 700,
+//               decoration: BoxDecoration(
+//                 color: const Color(0xFFD9D9D9),
+//                 borderRadius: BorderRadius.circular(20),
+//               ),
+//               child: Form(
+//                 key: _formKey,
+//                 child: Center(
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'Tanggal',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 300,
+//                         height: 50,
+//                         child: TextFormField(
+//                           controller: _tanggalController,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10.0),
+//                             ),
+//                             filled: true,
+//                             fillColor: Colors.white,
+//                             suffixIcon: IconButton(
+//                               icon: const Icon(Icons.calendar_today),
+//                               onPressed: () async {
+//                                 DateTime? tanggal = await showDatePicker(
+//                                   context: context,
+//                                   initialDate: DateTime.now(),
+//                                   firstDate: DateTime(2000),
+//                                   lastDate: DateTime(2100),
+//                                 );
+
+//                                 if (tanggal != null) {
+//                                   selectedDate =
+//                                       DateFormat('dd-MM-yyyy').format(tanggal);
+
+//                                   setState(() {
+//                                     _tanggalController.text =
+//                                         selectedDate.toString();
+//                                   });
+//                                 }
+//                               },
+//                             ),
+//                           ),
+//                           readOnly: true,
+//                         ),
+//                       ),
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'Nama Pemilik',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 300,
+//                         height: 50,
+//                         child: TextFormField(
+//                           // controller: _tanggalController,
+//                           decoration: InputDecoration(
+//                             hintText: 'Nama Pemilik',
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10.0),
+//                             ),
+//                             filled: true,
+//                             fillColor: Colors.white,
+//                           ),
+//                           onChanged: (value) {
+//                             namapemilik = value;
+//                           },
+//                         ),
+//                       ),
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'No. Telepon',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 300,
+//                         height: 50,
+//                         child: TextFormField(
+//                           // controller: _tanggalController,
+//                           decoration: InputDecoration(
+//                             hintText: 'No. Telepon',
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10.0),
+//                             ),
+//                             filled: true,
+//                             fillColor: Colors.white,
+//                           ),
+//                           onChanged: (value) {
+//                             notelepon = value;
+//                           },
+//                         ),
+//                       ),
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'Sepatu',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 300,
+//                         height: 50,
+//                         child: TextFormField(
+//                           // controller: _tanggalController,
+//                           decoration: InputDecoration(
+//                             hintText: 'Sepatu',
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10.0),
+//                             ),
+//                             filled: true,
+//                             fillColor: Colors.white,
+//                           ),
+//                           onChanged: (value) {
+//                             sepatu = value;
+//                           },
+//                         ),
+//                       ),
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'Jenis Treatment',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       StreamBuilder<QuerySnapshot>(
+//                         stream: FirebaseFirestore.instance
+//                             .collection('treatments')
+//                             .snapshots(),
+//                         builder: (context, snapshot) {
+//                           if (!snapshot.hasData) {
+//                             return const CircularProgressIndicator();
+//                           } else {
+//                             List<DropdownMenuItem<String>> dropdownItems = [];
+//                             final items = snapshot.data!.docs;
+//                             for (var item in items) {
+//                               // Assuming the 'jenistreatment' field exists in each document
+//                               String itemName = item['jenistreatment'];
+//                               dropdownItems.add(
+//                                 DropdownMenuItem(
+//                                   value: itemName,
+//                                   child: Text(itemName),
+//                                 ),
+//                               );
+//                             }
+//                             return SizedBox(
+//                               width: 300,
+//                               height: 60,
+//                               child: DropdownButtonFormField<String>(
+//                                 borderRadius: BorderRadius.circular(10.0),
+//                                 icon: const Icon(
+//                                     Icons.arrow_drop_down_circle_rounded),
+//                                 value: listitem,
+//                                 items: dropdownItems,
+//                                 onChanged: (item) async {
+//                                   setState(() {
+//                                     listitem = item;
+//                                   });
+//                                   harga = await getHargaByItem(
+//                                       item!); // Fetch the harga for the selected item
+//                                 },
+//                                 decoration: InputDecoration(
+//                                   hintText: 'Jenis Treatment',
+//                                   border: OutlineInputBorder(
+//                                     borderRadius: BorderRadius.circular(10.0),
+//                                   ),
+//                                   filled: true,
+//                                   fillColor: Colors.white,
+//                                 ),
+//                               ),
+//                             );
+//                           }
+//                         },
+//                       ),
+//                       const Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           vertical: 10.0,
+//                           horizontal: 30.0,
+//                         ),
+//                         child: Align(
+//                           alignment: Alignment.centerLeft,
+//                           child: Text(
+//                             'Harga',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                             textAlign: TextAlign.start,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         width: 300,
+//                         height: 50,
+//                         child: FutureBuilder<String?>(
+//                           future: listitem != null
+//                               ? getHargaByItem(listitem!)
+//                               : null,
+//                           builder: (context, snapshot) {
+//                             if (snapshot.connectionState ==
+//                                 ConnectionState.waiting) {
+//                               return const CircularProgressIndicator();
+//                             } else {
+//                               String harga = snapshot.data ?? '';
+//                               return TextFormField(
+//                                 initialValue: harga,
+//                                 decoration: InputDecoration(
+//                                   hintText: 'Harga',
+//                                   border: OutlineInputBorder(
+//                                     borderRadius: BorderRadius.circular(10.0),
+//                                   ),
+//                                   filled: true,
+//                                   fillColor: Colors.white,
+//                                 ),
+//                                 readOnly: true,
+//                               );
+//                             }
+//                           },
+//                         ),
+//                       ),
+//                       const SizedBox(height: 40),
+//                       ElevatedButton(
+//                         onPressed: () {
+//                           if (_formKey.currentState!.validate()) {
+//                             PesananModel pesm = PesananModel(
+//                               selectedDate: selectedDate!,
+//                               namapemilik: namapemilik!,
+//                               notelepon: notelepon!,
+//                               sepatu: sepatu!,
+//                               listitem: listitem!,
+//                               harga: harga!, // Use the harga value here
+//                             );
+//                             pesananController.addPesanan(pesm);
+//                             ScaffoldMessenger.of(context).showSnackBar(
+//                               const SnackBar(
+//                                 content: Text('Pesanan Ditambahkan'),
+//                               ),
+//                             );
+//                             Navigator.push(
+//                               context,
+//                               MaterialPageRoute(
+//                                 builder: (context) => const DashboardUser(),
+//                               ),
+//                             );
+//                           }
+//                         },
+//                         style: ElevatedButton.styleFrom(
+//                           backgroundColor: const Color(0xFF454BE0),
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(18),
+//                           ),
+//                           minimumSize: const Size(150, 50),
+//                         ),
+//                         child: const Text(
+//                           'Simpan',
+//                           style: TextStyle(
+//                             fontSize: 16,
+//                             color: Colors.white,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         )),
+//       ),
+//     );
+//   }
+
+//   Future<String?> getHargaByItem(String selectedItem) async {
+//     try {
+//       // Perform a query to get the harga from Firestore based on the selected item
+//       var snapshot = await FirebaseFirestore.instance
+//           .collection('treatments')
+//           .where('jenistreatment', isEqualTo: selectedItem)
+//           .get();
+
+//       // Assuming the 'harga' field exists in each document
+//       if (snapshot.docs.isNotEmpty) {
+//         return snapshot.docs.first['harga'].toString();
+//       }
+//     } catch (e) {
+//       print('Error fetching harga: $e');
+//     }
+
+//     return null;
+//   }
+// }

@@ -68,7 +68,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       case 0:
         return const LaporanPage();
       case 1:
-        return const PesananPage();
+        return PesananPage();
       case 2:
         return const Pengeluaran();
       case 3:

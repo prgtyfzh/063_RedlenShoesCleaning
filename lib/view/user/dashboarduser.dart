@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/controller/pesanancontroller.dart';
+
 import 'package:redlenshoescleaning/view/user/createpesanan.dart';
 import 'package:redlenshoescleaning/view/user/detailpesanan.dart';
 
@@ -17,6 +18,7 @@ class DashboardUser extends StatefulWidget {
 
 class _DashboardUserState extends State<DashboardUser> {
   final AuthController authController = AuthController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var pesc = PesananController();
 
   @override
@@ -53,61 +55,65 @@ class _DashboardUserState extends State<DashboardUser> {
       body: Column(
         children: [
           Expanded(
-              child: StreamBuilder<List<DocumentSnapshot>>(
-            stream: pesc.stream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final List<DocumentSnapshot> data = snapshot.data!;
+            child: StreamBuilder<List<DocumentSnapshot>>(
+              stream: pesc.stream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-              return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 5.0,
-                      horizontal: 20.0,
-                    ),
-                    child: InkWell(
-                      onLongPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailPesanan(
-                              selectedDate: data[index]['selectedDate'],
-                              namapemilik: data[index]['namapemilik'],
-                              notelepon: data[index]['notelepon'],
-                              sepatu: data[index]['sepatu'],
-                              listitem: data[index]['listitem'],
-                              harga: data[index]['harga'],
+                final List<DocumentSnapshot> data = snapshot.data!;
+
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20.0,
+                      ),
+                      child: InkWell(
+                        onLongPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPesanan(
+                                selectedDate: data[index]['selectedDate'],
+                                namapemilik: data[index]['namapemilik'],
+                                notelepon: data[index]['notelepon'],
+                                sepatu: data[index]['sepatu'],
+                                listitem: data[index]['listitem'],
+                                harga: data[index]['harga'],
+                                status: data[index]['status'],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        color: const Color(0xFFD9D9D9),
-                        elevation: 4,
-                        child: ListTile(
-                          title: Text(data[index]['selectedDate']),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(data[index]['sepatu']),
-                              Text(data[index]['listitem']),
-                              // Text(data[index]['status']),
-                            ],
+                          );
+                        },
+                        child: Card(
+                          color: const Color(0xFFD9D9D9),
+                          elevation: 4,
+                          child: ListTile(
+                            title: Text(data[index]['selectedDate']),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(data[index]['sepatu']),
+                                Text(data[index]['listitem']),
+                                Text(data[index]['harga']),
+                                Text(data[index]['status']),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
-            },
-          )),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

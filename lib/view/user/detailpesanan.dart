@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:redlenshoescleaning/controller/pesanancontroller.dart';
 import 'package:redlenshoescleaning/view/user/dashboarduser.dart';
 
@@ -13,6 +14,7 @@ class DetailPesanan extends StatefulWidget {
     required this.sepatu,
     required this.listitem,
     required this.harga,
+    required this.status,
   }) : super(key: key);
 
   final String selectedDate;
@@ -21,6 +23,7 @@ class DetailPesanan extends StatefulWidget {
   final String sepatu;
   final String listitem;
   final String harga;
+  final String status;
 
   @override
   State<DetailPesanan> createState() => _DetailPesananState();
@@ -67,7 +70,7 @@ class _DetailPesananState extends State<DetailPesanan> {
               padding: const EdgeInsets.all(20.0),
               child: Container(
                 width: 350,
-                height: 650,
+                height: 700,
                 decoration: BoxDecoration(
                   color: const Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.circular(20),
@@ -344,6 +347,49 @@ class _DetailPesananState extends State<DetailPesanan> {
                                     horizontal: 10.0),
                                 child: Text(
                                   data[index]['harga'],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 30.0,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Status',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 300,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Text(
+                                  data[index]['status'],
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
