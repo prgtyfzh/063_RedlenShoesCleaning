@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/model/pesananmodel.dart';
 
 class PesananController {
   final pesananCollection = FirebaseFirestore.instance.collection('pesanan');
+  var treatmentController = TreatmentController();
 
   final StreamController<List<DocumentSnapshot>> streamController =
       StreamController<List<DocumentSnapshot>>.broadcast();
@@ -30,6 +32,11 @@ class PesananController {
     );
 
     await docRef.update(pesananModel.toMap());
+  }
+
+  Future<List> getFromTreatment() async {
+    var treatments = await treatmentController.getTreatment();
+    return treatments;
   }
 
   Future<void> updatePesanan(PesananModel pesmodel) async {

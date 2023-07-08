@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redlenshoescleaning/view/admin/detaildaftarpesanan.dart';
 
 class PesananPage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -38,91 +39,73 @@ class PesananPage extends StatelessWidget {
                     vertical: 5.0,
                     horizontal: 20.0,
                   ),
-                  child: Card(
-                    color: const Color(0xFFD9D9D9),
-                    elevation: 4,
-                    child: ListTile(
-                      title: Text(pesanan['selectedDate']),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(pesanan['namapemilik']),
-                          Text(pesanan['sepatu']),
-                          Text(pesanan['listitem']),
-                          Text(pesanan['status']),
-                        ],
-                      ),
-                      onTap: () {
-                        if (pesanan['status'] == 'pending') {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Konfirmasi Pesanan'),
-                              content: const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('Terima Pesanan?'),
+                  child: InkWell(
+                    onLongPress: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => DetailDataPesanan(
+                      //         // selectedDate: data[index]['selectedDate'],
+                      //         // namapemilik: data[index]['namapemilik'],
+                      //         // notelepon: data[index]['notelepon'],
+                      //         // sepatu: data[index]['sepatu'],
+                      //         // listitem: data[index]['listitem'],
+                      //         // harga: data[index]['harga'],
+                      //         // status: data[index]['status'],
+                      //         ),
+                      //   ),
+                      // );
+                    },
+                    child: Card(
+                      color: const Color(0xFFD9D9D9),
+                      elevation: 4,
+                      child: ListTile(
+                        title: Text(pesanan['selectedDate']),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(pesanan['namapemilik']),
+                            Text(pesanan['sepatu']),
+                            Text(pesanan['listitem']),
+                            Text(pesanan['status']),
+                          ],
+                        ),
+                        onTap: () {
+                          if (pesanan['status'] == 'pending') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Konfirmasi Pesanan'),
+                                content: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Terima Pesanan?'),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      _firestore
+                                          .collection('pesanan')
+                                          .doc(data[index].id)
+                                          .update({'status': 'confirmed'});
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Confirm'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
                                 ],
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    _firestore
-                                        .collection('pesanan')
-                                        .doc(data[index].id)
-                                        .update({'status': 'confirmed'});
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Confirm'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      // onTap: () {
-                      //   if (pesanan['status'] == "pending") {
-                      //     showDialog(
-                      //       context: context,
-                      //       builder: (context) => AlertDialog(
-                      //         title: const Text('Konfirmasi Pesanan'),
-                      //         content: const Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: [
-                      //             Text('Terima Pesanan?'),
-                      //           ],
-                      //         ),
-                      //         actions: [
-                      //           TextButton(
-                      //             onPressed: () {
-                      //               _firestore
-                      //                   .collection('pesanan')
-                      //                   .doc(data[index].id)
-                      //                   .update(
-                      //                       {pesanan['status'] : "Confirmed"});
-                      //               Navigator.of(context).pop();
-                      //             },
-                      //             child: const Text('Confirm'),
-                      //           ),
-                      //           TextButton(
-                      //             onPressed: () {
-                      //               Navigator.of(context).pop();
-                      //             },
-                      //             child: const Text('Cancel'),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     );
-                      //   }
-                      // },
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ),
                 );
