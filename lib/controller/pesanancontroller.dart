@@ -34,25 +34,6 @@ class PesananController {
     await docRef.update(pesananModel.toMap());
   }
 
-  Future<List> getFromTreatment() async {
-    var treatments = await treatmentController.getTreatment();
-    return treatments;
-  }
-
-  Future<void> updatePesanan(PesananModel pesmodel) async {
-    final PesananModel pesananModel = PesananModel(
-        selectedDate: pesmodel.selectedDate,
-        namapemilik: pesmodel.namapemilik,
-        notelepon: pesmodel.notelepon,
-        sepatu: pesmodel.sepatu,
-        harga: pesmodel.harga,
-        status: pesmodel.status,
-        listitem: pesmodel.listitem,
-        id: pesmodel.id);
-
-    await pesananCollection.doc(pesmodel.id).update(pesananModel.toMap());
-  }
-
   Future<void> removePesanan(String id) async {
     await pesananCollection.doc(id).delete();
   }
@@ -62,6 +43,4 @@ class PesananController {
     streamController.sink.add(pesanan.docs);
     return pesanan.docs;
   }
-
-  void getPesananByUser(String uid) {}
 }
