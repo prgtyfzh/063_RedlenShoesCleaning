@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String? email;
   String? password;
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +101,22 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(
+                          obscureText: !isPasswordVisible,
+                          decoration: InputDecoration(
                             hintText: 'Password',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
-                            suffixIcon: Icon(Icons.remove_red_eye),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           onChanged: (value) {
                             setState(() {

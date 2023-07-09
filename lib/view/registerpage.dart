@@ -14,6 +14,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final authController = AuthController();
   final _passwordController = TextEditingController();
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
   String? name;
   String? email;
@@ -136,11 +138,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
+                          obscureText: !isPasswordVisible,
+                          decoration: InputDecoration(
                             hintText: 'Password',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
-                            suffixIcon: Icon(Icons.remove_red_eye),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -174,11 +187,23 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(
+                          obscureText: !isConfirmPasswordVisible,
+                          decoration: InputDecoration(
                             hintText: 'Confirm Password',
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
-                            suffixIcon: Icon(Icons.remove_red_eye),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isConfirmPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isConfirmPasswordVisible =
+                                      !isConfirmPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
