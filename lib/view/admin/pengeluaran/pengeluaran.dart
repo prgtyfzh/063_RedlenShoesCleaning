@@ -7,7 +7,7 @@ import 'package:redlenshoescleaning/view/admin/pengeluaran/updatepengeluaran.dar
 import 'createpengeluaran.dart';
 
 class Pengeluaran extends StatefulWidget {
-  const Pengeluaran({super.key});
+  const Pengeluaran({Key? key});
 
   @override
   State<Pengeluaran> createState() => _PengeluaranState();
@@ -89,11 +89,44 @@ class _PengeluaranState extends State<Pengeluaran> {
                                   ),
                                 );
                               } else if (value == 'delete') {
-                                pc.removePengeluaran(
-                                    data[index]['id'].toString());
-                                setState(() {
-                                  pc.getPengeluaran();
-                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title:
+                                          const Text('Konfirmasi Penghapusan'),
+                                      content: const Text(
+                                          'Yakin ingin menghapus pengeluaran ini?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text(
+                                            'Batal',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text(
+                                            'Hapus',
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                          onPressed: () {
+                                            pc.removePengeluaran(
+                                                data[index]['id'].toString());
+                                            setState(() {
+                                              pc.getPengeluaran();
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               }
                             },
                             itemBuilder: (context) => [

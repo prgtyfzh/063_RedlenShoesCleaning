@@ -35,6 +35,70 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
 
   final TextEditingController _tanggalController = TextEditingController();
 
+  Future<void> _showConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Yakin ingin mengubah pengeluaran?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ubah'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _updatePengeluaran();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _updatePengeluaran() {
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      PengeluaranModel pm = PengeluaranModel(
+        id: widget.id,
+        selectedDate: newselectedDate!.toString(),
+        namabarang: newnamabarang!.toString(),
+        hargabarang: newhargabarang!.toString(),
+      );
+      pengeluaranController.updatePengeluaran(pm);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pengeluaran Berubah'),
+        ),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Pengeluaran(),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tanggalController.text = widget.selectedDate!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +163,7 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
                           width: 300,
                           height: 50,
                           child: TextFormField(
-                            // controller: _tanggalController,
+                            controller: _tanggalController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -132,7 +196,6 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
                             onSaved: (value) {
                               newselectedDate = value;
                             },
-                            initialValue: widget.selectedDate,
                             readOnly: true,
                           ),
                         ),
@@ -191,7 +254,6 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
                           width: 300,
                           height: 50,
                           child: TextFormField(
-                            // controller: _tanggalController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -208,27 +270,66 @@ class _UpdatePengeluaranState extends State<UpdatePengeluaran> {
                         const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formkey.currentState!.validate()) {
-                              _formkey.currentState!.save();
-                              PengeluaranModel pm = PengeluaranModel(
-                                id: widget.id,
-                                selectedDate: newselectedDate!.toString(),
-                                namabarang: newnamabarang!.toString(),
-                                hargabarang: newhargabarang!.toString(),
-                              );
-                              pengeluaranController.updatePengeluaran(pm);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Pengeluaran Berubah'),
-                                ),
-                              );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Pengeluaran(),
-                                ),
-                              );
-                            }
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: const Text('Konfirmasi Perubahan'),
+                                  content: const Text(
+                                      'Yakin ingin mengubah pengeluaran?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text(
+                                        'Batal',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        'Ubah',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        if (_formkey.currentState!.validate()) {
+                                          _formkey.currentState!.save();
+                                          PengeluaranModel pm =
+                                              PengeluaranModel(
+                                            id: widget.id,
+                                            selectedDate:
+                                                newselectedDate!.toString(),
+                                            namabarang:
+                                                newnamabarang!.toString(),
+                                            hargabarang:
+                                                newhargabarang!.toString(),
+                                          );
+                                          pengeluaranController
+                                              .updatePengeluaran(pm);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content:
+                                                  Text('Pengeluaran Berubah'),
+                                            ),
+                                          );
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Pengeluaran(),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF454BE0),

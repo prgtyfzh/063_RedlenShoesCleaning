@@ -6,7 +6,7 @@ import '../../../controller/treatmentcontroller.dart';
 import 'createtreatment.dart';
 
 class Treatment extends StatefulWidget {
-  const Treatment({super.key});
+  const Treatment({Key? key});
 
   @override
   State<Treatment> createState() => _TreatmentState();
@@ -84,11 +84,45 @@ class _TreatmentState extends State<Treatment> {
                               IconButton(
                                 icon: const Icon(Icons.delete),
                                 onPressed: () {
-                                  tc.removeTreatment(
-                                      data[index]['id'].toString());
-                                  setState(() {
-                                    tc.getTreatment();
-                                  });
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        title: const Text(
+                                            'Konfirmasi Penghapusan'),
+                                        content: const Text(
+                                            'Yakin ingin menghapus Treatment ini?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text(
+                                              'Batal',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text(
+                                              'Hapus',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            ),
+                                            onPressed: () {
+                                              tc.removeTreatment(
+                                                  data[index]['id'].toString());
+                                              setState(() {
+                                                tc.getTreatment();
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                               ),
                             ],

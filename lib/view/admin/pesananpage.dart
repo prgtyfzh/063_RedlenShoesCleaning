@@ -43,6 +43,13 @@ class _PesananPageState extends State<PesananPage> {
     }
   }
 
+  void _selesaikanPesanan(DocumentSnapshot document) {
+    _firestore
+        .collection('pesanan')
+        .doc(document.id)
+        .update({'status': 'Finished'});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,6 +167,58 @@ class _PesananPageState extends State<PesananPage> {
                                     },
                                     child: const Text(
                                       'Confirm',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (pesanan['status'] == 'On Process') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: const Text(
+                                  'Selesaikan Pesanan',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Tanggal: ${pesanan['selectedDate']}'),
+                                    Text(
+                                        'Nama Pemilik: ${pesanan['namapemilik']}'),
+                                    Text('No Telepon: ${pesanan['notelepon']}'),
+                                    Text('Sepatu: ${pesanan['sepatu']}'),
+                                    Text(
+                                        'Jenis Treatment: ${pesanan['listitem']}'),
+                                    Text('Harga: ${pesanan['harga']}'),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      _selesaikanPesanan(data[index]);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Selesaikan Pesanan',
                                       style: TextStyle(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold,

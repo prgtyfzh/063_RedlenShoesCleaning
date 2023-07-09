@@ -60,23 +60,6 @@ class PesananController {
     return pesanan.docs;
   }
 
-  // Future<String> getTotalPendapatan() async {
-  //   try {
-  //     final pengeluaran = await pesananCollection.get();
-  //     double total = 0;
-  //     pengeluaran.docs.forEach((doc) {
-  //       PesananModel pesananModel =
-  //           PesananModel.fromMap(doc.data() as Map<String, dynamic>);
-  //       double harga = double.tryParse(pesananModel.harga) ?? 0;
-  //       total += harga;
-  //     });
-  //     return total.toStringAsFixed(2);
-  //   } catch (e) {
-  //     print('Error while getting total pendapatan: $e');
-  //     return '0';
-  //   }
-  // }
-
   Future<String> getTotalPendapatan() async {
     try {
       final pesanan =

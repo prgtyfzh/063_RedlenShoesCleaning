@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
-
 import '../../controller/pesanancontroller.dart';
 
 class DetailDataPesanan extends StatefulWidget {
@@ -392,114 +391,28 @@ class _DetailDataPesananState extends State<DetailDataPesanan> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            Container(
                               width: 300,
-                              height: 60,
-                              child: data[index]['status'] == 'On Process'
-                                  ? DropdownButtonFormField<String>(
-                                      value: newstatus,
-                                      items: const <DropdownMenuItem<String>>[
-                                        DropdownMenuItem<String>(
-                                          value: 'Finished',
-                                          child: Text('Finished'),
-                                        ),
-                                      ],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          newstatus = value;
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please select a status';
-                                        }
-                                        return null;
-                                      },
-                                    )
-                                  : TextFormField(
-                                      initialValue: data[index]['status'],
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13.5,
-                                      ),
-                                      enabled:
-                                          data[index]['status'] == 'On Process',
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                      ),
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter a status';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        if (data[index]['status'] ==
-                                            'On Process') {
-                                          setState(() {
-                                            newstatus = value;
-                                          });
-                                        }
-                                      },
-                                    ),
-                            ),
-                            Visibility(
-                              visible: data[index]['status'] == 'On Process',
-                              child: const SizedBox(height: 40),
-                            ),
-                            Visibility(
-                              visible: data[index]['status'] == 'On Process',
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    if (newstatus != null) {
-                                      updateStatusInFirestore(
-                                        data[index].id,
-                                        newstatus!,
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const DashboardAdmin(),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF454BE0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  minimumSize: const Size(150, 50),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1.0,
                                 ),
-                                child: const Text(
-                                  'Simpan',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Text(
+                                    data[index]['status'],
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    textAlign: TextAlign.start,
                                   ),
                                 ),
                               ),
