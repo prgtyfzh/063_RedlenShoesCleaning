@@ -341,26 +341,60 @@ class _CreatePesananState extends State<CreatePesanan> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            PesananModel pesm = PesananModel(
-                              status: "Pending",
-                              selectedDate: selectedDate!,
-                              namapemilik: namapemilik!,
-                              notelepon: notelepon!,
-                              sepatu: sepatu!,
-                              listitem: listitem!,
-                              harga: harga!,
-                            );
-                            pesananController.addPesanan(pesm);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Pesanan Ditambahkan'),
-                              ),
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DashboardUser(),
-                              ),
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: const Text('Konfirmasi Pesanan'),
+                                  content: const Text(
+                                      'Apakah Anda yakin ingin menyimpan pesanan?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        'Batal',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        PesananModel pesm = PesananModel(
+                                          status: "Pending",
+                                          selectedDate: selectedDate!,
+                                          namapemilik: namapemilik!,
+                                          notelepon: notelepon!,
+                                          sepatu: sepatu!,
+                                          listitem: listitem!,
+                                          harga: harga!,
+                                        );
+                                        pesananController.addPesanan(pesm);
+                                        Navigator.of(context).pop();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text('Pesanan Ditambahkan'),
+                                          ),
+                                        );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const DashboardUser(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Tambahkan Pesanan',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           }
                         },
