@@ -52,14 +52,13 @@ class _CreatePesananState extends State<CreatePesanan> {
           ),
         ),
       ),
-      body: SafeArea(
+      body: Center(
         child: SingleChildScrollView(
-            child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
               width: 350,
-              height: 700,
+              height: 900,
               decoration: BoxDecoration(
                 color: const Color(0xFFD9D9D9),
                 borderRadius: BorderRadius.circular(20),
@@ -87,9 +86,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
                           controller: _tanggalController,
                           decoration: InputDecoration(
@@ -104,8 +102,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                                 DateTime? tanggal = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
+                                  firstDate: DateTime(2023),
+                                  lastDate: DateTime(2025),
                                 );
 
                                 if (tanggal != null) {
@@ -121,6 +119,12 @@ class _CreatePesananState extends State<CreatePesanan> {
                             ),
                           ),
                           readOnly: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Tanggal tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       const Padding(
@@ -140,9 +144,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
                           decoration: InputDecoration(
                             hintText: 'Nama Pemilik',
@@ -152,6 +155,12 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Nama pemilik tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             namapemilik = value;
                           },
@@ -174,9 +183,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
                           decoration: InputDecoration(
                             hintText: 'No. Telepon',
@@ -186,6 +194,12 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'No. Telepon tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             notelepon = value;
                           },
@@ -208,9 +222,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
                           decoration: InputDecoration(
                             hintText: 'Sepatu',
@@ -220,6 +233,12 @@ class _CreatePesananState extends State<CreatePesanan> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Sepatu tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             sepatu = value;
                           },
@@ -262,9 +281,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                                 ),
                               );
                             }
-                            return SizedBox(
+                            return Container(
                               width: 300,
-                              height: 60,
                               child: DropdownButtonFormField<String>(
                                 borderRadius: BorderRadius.circular(10.0),
                                 icon: const Icon(
@@ -279,13 +297,19 @@ class _CreatePesananState extends State<CreatePesanan> {
                                       item!); // Fetch the harga for the selected item
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Jenis Treatment',
+                                  hintText: 'Pilih Jenis Treatment',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   filled: true,
                                   fillColor: Colors.white,
                                 ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Jenis treatment tidak boleh kosong!';
+                                  }
+                                  return null;
+                                },
                               ),
                             );
                           }
@@ -308,9 +332,8 @@ class _CreatePesananState extends State<CreatePesanan> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: FutureBuilder<String?>(
                           future: listitem != null
                               ? getHargaByItem(listitem!)
@@ -361,7 +384,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        PesananModel pesm = PesananModel(
+                                        PesananModel pesmodel = PesananModel(
                                           status: "Pending",
                                           selectedDate: selectedDate!,
                                           namapemilik: namapemilik!,
@@ -370,7 +393,7 @@ class _CreatePesananState extends State<CreatePesanan> {
                                           listitem: listitem!,
                                           harga: harga!,
                                         );
-                                        pesananController.addPesanan(pesm);
+                                        pesananController.addPesanan(pesmodel);
                                         Navigator.of(context).pop();
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
@@ -419,7 +442,7 @@ class _CreatePesananState extends State<CreatePesanan> {
               ),
             ),
           ),
-        )),
+        ),
       ),
     );
   }

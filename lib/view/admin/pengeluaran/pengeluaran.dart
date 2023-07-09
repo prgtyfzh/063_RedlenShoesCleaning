@@ -87,7 +87,13 @@ class _PengeluaranState extends State<Pengeluaran> {
                                       hargabarang: data[index]['hargabarang'],
                                     ),
                                   ),
-                                );
+                                ).then((value) {
+                                  if (value == true) {
+                                    setState(() {
+                                      pc.getPengeluaran();
+                                    });
+                                  }
+                                });
                               } else if (value == 'delete') {
                                 showDialog(
                                   context: context,
@@ -157,7 +163,13 @@ class _PengeluaranState extends State<Pengeluaran> {
             MaterialPageRoute(
               builder: (context) => const CreatePengeluaran(),
             ),
-          );
+          ).then((value) {
+            if (value == true) {
+              setState(() {
+                pc.getPengeluaran();
+              });
+            }
+          });
         },
         backgroundColor: const Color(0xFFD9D9D9),
         child: const Icon(Icons.add),

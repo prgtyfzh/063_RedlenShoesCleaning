@@ -78,7 +78,13 @@ class _TreatmentState extends State<Treatment> {
                                         harga: data[index]['harga'],
                                       ),
                                     ),
-                                  );
+                                  ).then((value) {
+                                    if (value == true) {
+                                      setState(() {
+                                        tc.getTreatment();
+                                      });
+                                    }
+                                  });
                                 },
                               ),
                               IconButton(
@@ -144,7 +150,13 @@ class _TreatmentState extends State<Treatment> {
             MaterialPageRoute(
               builder: (context) => const CreateTreatment(),
             ),
-          );
+          ).then((value) {
+            if (value == true) {
+              setState(() {
+                tc.getTreatment();
+              });
+            }
+          });
         },
         backgroundColor: const Color(0xFFD9D9D9),
         child: const Icon(Icons.add),

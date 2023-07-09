@@ -141,7 +141,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: !isPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Password',
-                            hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                            hintStyle:
+                                const TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 isPasswordVisible
@@ -190,7 +191,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: !isConfirmPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Confirm Password',
-                            hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                            hintStyle:
+                                const TextStyle(fontStyle: FontStyle.italic),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 isConfirmPasswordVisible
@@ -238,7 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       data: ThemeData(
                                         // Customize the color of the dialog background
                                         dialogBackgroundColor:
-                                            Color(0xFFD9D9D9),
+                                            const Color(0xFFD9D9D9),
                                       ),
                                       child: AlertDialog(
                                         title: const Text(
@@ -271,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       data: ThemeData(
                                         // Customize the color of the dialog background
                                         dialogBackgroundColor:
-                                            Color(0xFFD9D9D9),
+                                            const Color(0xFFD9D9D9),
                                       ),
                                       child: AlertDialog(
                                         title:

@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.18.1
   animated_splash_screen: ^1.3.0
   animated_size_and_fade: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -33,4 +34,8 @@ flutter:
   assets:
     - assets/image/LoginPage.png
     - assets/image/LogoRedlen.png
-    - assets/image/DashboardAdmin.png
+
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "@mipmap/logo.png"

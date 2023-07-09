@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/controller/treatmentcontroller.dart';
 import 'package:redlenshoescleaning/model/treatmentmodel.dart';
-import 'package:redlenshoescleaning/view/admin/dashboardadmin.dart';
-import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 
 class CreateTreatment extends StatefulWidget {
   const CreateTreatment({super.key});
@@ -23,18 +21,6 @@ class _CreateTreatmentState extends State<CreateTreatment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DashboardAdmin(),
-              ),
-            );
-          },
-        ),
-        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
@@ -45,11 +31,12 @@ class _CreateTreatmentState extends State<CreateTreatment> {
         ),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
               width: 350,
-              height: 370,
+              height: 400,
               decoration: BoxDecoration(
                 color: const Color(0xFFD9D9D9),
                 borderRadius: BorderRadius.circular(20),
@@ -77,11 +64,9 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
                           decoration: InputDecoration(
                             hintText: 'Jenis Treatment',
                             border: OutlineInputBorder(
@@ -90,6 +75,12 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Jenis Treatment tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             jenistreatment = value;
                           },
@@ -112,11 +103,9 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         width: 300,
-                        height: 50,
                         child: TextFormField(
-                          // controller: _tanggalController,
                           decoration: InputDecoration(
                             hintText: 'Harga',
                             border: OutlineInputBorder(
@@ -125,6 +114,12 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                             filled: true,
                             fillColor: Colors.white,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Harga tidak boleh kosong!';
+                            }
+                            return null;
+                          },
                           onChanged: (value) {
                             harga = value;
                           },
@@ -139,13 +134,8 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                             treatmentController.addTreatment(tm);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Treatment Added')));
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Treatment(),
-                              ),
-                            );
+                                    content: Text('Treatment Ditambahkan')));
+                            Navigator.pop(context, true);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -166,7 +156,9 @@ class _CreateTreatmentState extends State<CreateTreatment> {
                     ],
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );

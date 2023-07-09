@@ -4,12 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redlenshoescleaning/controller/pesanancontroller.dart';
 
 import 'package:redlenshoescleaning/view/user/createpesanan.dart';
-import 'package:redlenshoescleaning/view/user/detailpesanan.dart';
+
 import 'package:redlenshoescleaning/view/user/pesananselesai.dart';
 import 'package:redlenshoescleaning/view/user/pesananonprocess.dart';
 
 import '../../controller/authcontroller.dart';
 import '../loginpage.dart';
+import 'detailpesanan.dart';
 
 class DashboardUser extends StatefulWidget {
   const DashboardUser({Key? key});
@@ -35,7 +36,7 @@ class _DashboardUserState extends State<DashboardUser> {
         backgroundColor: const Color(0xFFD9D9D9),
         centerTitle: true,
         title: Text(
-          'REDLEN APPS',
+          'Menunggu Konfirmasi',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
           ),
@@ -167,7 +168,7 @@ class _DashboardUserState extends State<DashboardUser> {
                 final List<DocumentSnapshot> onProcessData = [];
                 final List<DocumentSnapshot> otherData = [];
 
-                // Memisahkan data berdasarkan status pesanan
+                // Separate data based on the status of the order
                 for (final document in data) {
                   final status = document['status'];
                   if (status == 'Finished') {

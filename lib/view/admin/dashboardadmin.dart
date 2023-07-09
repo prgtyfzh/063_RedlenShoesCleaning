@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:redlenshoescleaning/view/admin/pengeluaran/pengeluaran.dart';
 import 'package:redlenshoescleaning/view/admin/treatment/treatment.dart';
 import 'package:redlenshoescleaning/view/admin/laporanpage.dart';
@@ -29,8 +30,13 @@ class _DashboardAdminState extends State<DashboardAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    // Enable immersive mode
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: SafeArea(
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
         child: SizedBox(

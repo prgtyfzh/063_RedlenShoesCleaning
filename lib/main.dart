@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:redlenshoescleaning/view/loginpage.dart';
+
 import 'package:redlenshoescleaning/view/splashscreen.dart';
 
 Future main() async {
@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFD9D9D9),
+        ),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
