@@ -48,4 +48,21 @@ class PengeluaranController {
     streamController.sink.add(pengeluaran.docs);
     return pengeluaran.docs;
   }
+
+  Future<String> getTotalPengeluaran() async {
+    try {
+      final pengeluaran = await pengeluaranCollection.get();
+      double total = 0;
+      pengeluaran.docs.forEach((doc) {
+        PengeluaranModel pengeluaranModel =
+            PengeluaranModel.fromMap(doc.data() as Map<String, dynamic>);
+        double harga = double.tryParse(pengeluaranModel.hargabarang) ?? 0;
+        total += harga;
+      });
+      return total.toStringAsFixed(2);
+    } catch (e) {
+      print('Error while getting total pengeluaran: $e');
+      return '0';
+    }
+  }
 }
